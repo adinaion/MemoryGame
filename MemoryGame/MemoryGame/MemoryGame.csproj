@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Images\Category1\" />
     <Folder Include="Resources\Images\Category2\" />
     <Folder Include="Resources\Images\Category3\" />
+    <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Styles\" />
   </ItemGroup>
 
