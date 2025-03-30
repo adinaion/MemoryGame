@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Data\" />
+    <Folder Include="Resources\Images\Category1\" />
+    <Folder Include="Resources\Images\Category2\" />
+    <Folder Include="Resources\Images\Category3\" />
+    <Folder Include="Resources\Styles\" />
+  </ItemGroup>
+
+</Project>
