@@ -23,7 +23,9 @@ namespace MemoryGame.Views
         public SignInView()
         {
             InitializeComponent();
-            DataContext = new SignInViewModel();
+            var vm = new SignInViewModel();
+            vm.CloseAction = new Action(() => this.Close());
+            DataContext = vm;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

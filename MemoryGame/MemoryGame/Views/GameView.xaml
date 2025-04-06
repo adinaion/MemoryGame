@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MemoryGame.Views"
         mc:Ignorable="d"
-        Title="GameView" Height="450" Width="800">
+        Title="Memory Game" Height="450" Width="800">
     <Grid>
-        
+        <!-- Aici vei pune controalele pentru joc -->
+        <TextBlock Text="Aici e fereastra de joc" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   FontSize="24"/>
     </Grid>
 </Window>

@@ -103,9 +103,23 @@ namespace MemoryGame.ViewModels
             }
         }
 
+        public Action CloseAction { get; set; }
+
         private void Play(object parameter)
         {
-            // Logica de lansare a jocului cu utilizatorul selectat
+            // Asigură-te că există un utilizator selectat
+            if (SelectedUser == null)
+                return;
+
+            // Deschidem fereastra de joc
+            var gameView = new MemoryGame.Views.GameView();
+
+            // Dacă ai un GameViewModel, poți face:
+            // gameView.DataContext = new GameViewModel(SelectedUser);
+
+            gameView.Show();
+
+            CloseAction?.Invoke();
         }
 
         private bool CanChangeImage(object parameter)
