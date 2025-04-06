@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MemoryGame.ViewModels;
 
 namespace MemoryGame.Views
 {
@@ -19,9 +20,30 @@ namespace MemoryGame.Views
     /// </summary>
     public partial class GameView : Window
     {
+        private GameViewModel vm;
+
         public GameView()
         {
             InitializeComponent();
+            vm = new GameViewModel();
+            DataContext = vm;
+        }
+
+        // Dacă vrei să schimbi modul standard/custom prin evenimente:
+        private void RbStandard_Checked(object sender, RoutedEventArgs e)
+        {
+            if (vm != null)
+            {
+                vm.IsStandardSelected = true;
+            }
+        }
+
+        private void RbCustom_Checked(object sender, RoutedEventArgs e)
+        {
+            if (vm != null)
+            {
+                vm.IsStandardSelected = false;
+            }
         }
     }
 }

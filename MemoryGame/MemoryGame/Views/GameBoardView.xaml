@@ -1,0 +1,33 @@
+﻿<Window x:Class="MemoryGame.Views.GameBoardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="clr-namespace:MemoryGame.Helpers"
+        Title="Game Board" Height="600" Width="800">
+    <DockPanel>
+        <!-- Meniul sus: Timer și butonul de salvare -->
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="10">
+            <TextBlock Text="{Binding TimerText}" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <Button Content="Save Game" Command="{Binding SaveGameCommand}" Width="100"/>
+        </StackPanel>
+        <!-- Zona de joc: afișarea cartonarelor -->
+        <ItemsControl ItemsSource="{Binding Tiles}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <!-- UniformGrid cu numărul de rânduri și coloane legat la ViewModel -->
+                    <UniformGrid Rows="{Binding Rows}" Columns="{Binding Columns}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <!-- Fiecare tile este reprezentat printr-un buton -->
+                    <Button Command="{Binding FlipCommand}" Margin="5" Width="100" Height="100">
+                        <!-- Afișează o imagine sau un text, în funcție de starea tile-ului -->
+                        <Button.Content>
+                            <Image Source="{Binding ImagePath, Converter={StaticResource RelativePathConverter}}" Stretch="Uniform"/>
+                        </Button.Content>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DockPanel>
+</Window>

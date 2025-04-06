@@ -3,14 +3,70 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MemoryGame.Views"
         mc:Ignorable="d"
         Title="Memory Game" Height="450" Width="800">
     <Grid>
-        <!-- Aici vei pune controalele pentru joc -->
-        <TextBlock Text="Aici e fereastra de joc" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" 
-                   FontSize="24"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+            <!-- Selecția categoriei -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                <TextBlock Text="Category:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <!-- Legarea la lista de categorii și la categoria selectată -->
+                <ComboBox x:Name="cbCategory" Width="150" 
+                          ItemsSource="{Binding Categories}"
+                          SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" />
+            </StackPanel>
+
+            <!-- Butoanele principale -->
+            <Button Content="New Game" Width="150" Margin="0,5" Command="{Binding NewGameCommand}"/>
+            <Button Content="Open Game" Width="150" Margin="0,5" Command="{Binding OpenGameCommand}"/>
+            <Button Content="Statistics" Width="150" Margin="0,5" Command="{Binding StatisticsCommand}"/>
+            <Button Content="About" Width="150" Margin="0,5" Command="{Binding AboutCommand}"/>
+            <Button Content="Exit" Width="150" Margin="0,5" Command="{Binding ExitCommand}"/>
+
+            <!-- Secțiunea Options -->
+            <GroupBox Header="Options" Margin="0,20,0,0" Width="250">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <RadioButton x:Name="rbStandard" Content="Standard (4x4)" 
+                                     IsChecked="True" GroupName="GameOptions"
+                                     Checked="RbStandard_Checked"/>
+                        <RadioButton x:Name="rbCustom" Content="Custom" GroupName="GameOptions" 
+                                     Margin="20,0,0,0"
+                                     Checked="RbCustom_Checked"/>
+                    </StackPanel>
+                    <!-- Panelul Custom devine vizibil doar când rbCustom este selectat -->
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=rbCustom, Path=IsChecked}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="Rows:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbRows" Width="40" 
+                                  SelectedItem="{Binding CustomRows, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                            <ComboBoxItem Content="6"/>
+                        </ComboBox>
+                        <TextBlock Text="Columns:" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                        <ComboBox x:Name="cbColumns" Width="40" 
+                                  SelectedItem="{Binding CustomColumns, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                            <ComboBoxItem Content="6"/>
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
     </Grid>
 </Window>

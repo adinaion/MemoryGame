@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\Adina\Desktop\MAP\teme\tema2\MemoryGame\MemoryGame\MemoryGame\App.xaml
-62073368007
-3-104505646
-281392215898
+7-370603192
+18719550798
+31887828663
 198-556154604
-MainWindow.xaml;Views\AboutView.xaml;Views\GameView.xaml;Views\NewUserWindow.xaml;Views\SignInView.xaml;Views\StatisticsView.xaml;
+MainWindow.xaml;Views\AboutView.xaml;Views\GameBoardView.xaml;Views\GameView.xaml;Views\NewUserWindow.xaml;Views\SignInView.xaml;Views\StatisticsView.xaml;
 
-True
+False
 

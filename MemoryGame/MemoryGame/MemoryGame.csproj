@@ -12,6 +12,21 @@
     <None Remove="Resources\Data\1.jpg" />
     <None Remove="Resources\Data\2.jpg" />
     <None Remove="Resources\Data\3.jpg" />
+    <None Remove="Resources\Images\Category1\1.jpg" />
+    <None Remove="Resources\Images\Category1\10.jpg" />
+    <None Remove="Resources\Images\Category1\11.jpg" />
+    <None Remove="Resources\Images\Category1\12.jpg" />
+    <None Remove="Resources\Images\Category1\13.jpg" />
+    <None Remove="Resources\Images\Category1\14.jpg" />
+    <None Remove="Resources\Images\Category1\15.jpg" />
+    <None Remove="Resources\Images\Category1\2.jpg" />
+    <None Remove="Resources\Images\Category1\3.jpg" />
+    <None Remove="Resources\Images\Category1\4.jpg" />
+    <None Remove="Resources\Images\Category1\5.jpg" />
+    <None Remove="Resources\Images\Category1\6.jpg" />
+    <None Remove="Resources\Images\Category1\7.jpg" />
+    <None Remove="Resources\Images\Category1\8.jpg" />
+    <None Remove="Resources\Images\Category1\9.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,10 +39,54 @@
     <Content Include="Resources\Data\3.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Images\Category1\1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\10.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\11.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\12.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\13.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\14.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\15.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\4.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\5.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\6.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\7.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\8.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\Category1\9.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Images\Category1\" />
     <Folder Include="Resources\Images\Category2\" />
     <Folder Include="Resources\Images\Category3\" />
     <Folder Include="Resources\Styles\" />

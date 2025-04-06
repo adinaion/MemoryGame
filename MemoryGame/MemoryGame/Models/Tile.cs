@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace MemoryGame.Models
 {
-    class Tile
+    public class Tile
     {
+        // Calea către imaginea afișată pe cartonaș
+        public string ImagePath { get; set; }
+        public bool IsFaceUp { get; set; }
+        public bool IsMatched { get; set; }
     }
 }
