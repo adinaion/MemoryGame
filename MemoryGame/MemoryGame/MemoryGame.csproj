@@ -9,10 +9,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Data\1.jpg" />
+    <None Remove="Resources\Data\2.jpg" />
+    <None Remove="Resources\Data\3.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Data\1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Data\2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Data\3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Resources\Images\Category1\" />
     <Folder Include="Resources\Images\Category2\" />
     <Folder Include="Resources\Images\Category3\" />
-    <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Styles\" />
   </ItemGroup>
 
