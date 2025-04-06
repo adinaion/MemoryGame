@@ -25,5 +25,10 @@ namespace MemoryGame.Views
             InitializeComponent();
             DataContext = new SignInViewModel();
         }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -75,9 +75,7 @@
             <Button Content="Play"
                     Command="{Binding PlayCommand}"
                     Margin="5"/>
-            <Button Content="Cancel"
-                    Command="{Binding CancelCommand}"
-                    Margin="5"/>
+            <Button Content="Cancel" Width="75" Margin="5" Click="CancelButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

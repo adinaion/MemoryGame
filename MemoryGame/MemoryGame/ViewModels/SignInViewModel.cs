@@ -41,7 +41,6 @@ namespace MemoryGame.ViewModels
         public ICommand NewUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
         public ICommand PlayCommand { get; }
-        public ICommand CancelCommand { get; }
         public ICommand NextImageCommand { get; }
         public ICommand PreviousImageCommand { get; }
 
@@ -54,7 +53,6 @@ namespace MemoryGame.ViewModels
             NewUserCommand = new RelayCommand(NewUser);
             DeleteUserCommand = new RelayCommand(DeleteUser, CanModifyUser);
             PlayCommand = new RelayCommand(Play, CanModifyUser);
-            CancelCommand = new RelayCommand(Cancel);
 
             // Inițializarea noilor comenzi pentru schimbarea imaginii
             NextImageCommand = new RelayCommand(NextImage, CanChangeImage);
@@ -108,11 +106,6 @@ namespace MemoryGame.ViewModels
         private void Play(object parameter)
         {
             // Logica de lansare a jocului cu utilizatorul selectat
-        }
-
-        private void Cancel(object parameter)
-        {
-            // Logica pentru închiderea ferestrei de sign in
         }
 
         private bool CanChangeImage(object parameter)
