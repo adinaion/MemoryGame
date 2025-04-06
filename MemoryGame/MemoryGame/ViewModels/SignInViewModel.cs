@@ -29,9 +29,10 @@ namespace MemoryGame.ViewModels
                 {
                     selectedUser = value;
                     OnPropertyChanged();
-                    // Notificăm modificarea pentru ca comenzile dependente de SelectedUser să fie re-evaluate
                     (DeleteUserCommand as RelayCommand)?.RaiseCanExecuteChanged();
                     (PlayCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                    (NextImageCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                    (PreviousImageCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -41,6 +42,8 @@ namespace MemoryGame.ViewModels
         public ICommand DeleteUserCommand { get; }
         public ICommand PlayCommand { get; }
         public ICommand CancelCommand { get; }
+        public ICommand NextImageCommand { get; }
+        public ICommand PreviousImageCommand { get; }
 
         public SignInViewModel()
         {
@@ -52,6 +55,10 @@ namespace MemoryGame.ViewModels
             DeleteUserCommand = new RelayCommand(DeleteUser, CanModifyUser);
             PlayCommand = new RelayCommand(Play, CanModifyUser);
             CancelCommand = new RelayCommand(Cancel);
+
+            // Inițializarea noilor comenzi pentru schimbarea imaginii
+            NextImageCommand = new RelayCommand(NextImage, CanChangeImage);
+            PreviousImageCommand = new RelayCommand(PreviousImage, CanChangeImage);
         }
 
         private void NewUser(object parameter)
@@ -106,6 +113,81 @@ namespace MemoryGame.ViewModels
         private void Cancel(object parameter)
         {
             // Logica pentru închiderea ferestrei de sign in
+        }
+
+        private bool CanChangeImage(object parameter)
+        {
+            return SelectedUser != null;
+        }
+
+        private void NextImage(object parameter)
+        {
+            if (SelectedUser == null)
+                return;
+
+            string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Data");
+            if (!Directory.Exists(imagesFolder))
+                return;
+
+            var files = Directory.GetFiles(imagesFolder, "*.*")
+                        .Where(f => f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                    f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                    f.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(f => f)
+                        .ToList();
+
+            if (files.Count == 0)
+                return;
+
+            // Convertim calea relativă a imaginii curente în cale absolută
+            string currentAbsolute = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, SelectedUser.ImagePath);
+            int currentIndex = files.FindIndex(f => f.Equals(currentAbsolute, StringComparison.OrdinalIgnoreCase));
+
+            if (currentIndex < 0)
+                currentIndex = 0;
+
+            int nextIndex = (currentIndex + 1) % files.Count;
+            string nextAbsolute = files[nextIndex];
+
+            string relativeNext = PathHelper.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, nextAbsolute);
+            SelectedUser.ImagePath = relativeNext;
+
+            // Salvează modificările în fișierul JSON
+            userService.SaveUsers(new List<User>(Users));
+        }
+
+        private void PreviousImage(object parameter)
+        {
+            if (SelectedUser == null)
+                return;
+
+            string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Data");
+            if (!Directory.Exists(imagesFolder))
+                return;
+
+            var files = Directory.GetFiles(imagesFolder, "*.*")
+                        .Where(f => f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                    f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                    f.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(f => f)
+                        .ToList();
+
+            if (files.Count == 0)
+                return;
+
+            string currentAbsolute = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, SelectedUser.ImagePath);
+            int currentIndex = files.FindIndex(f => f.Equals(currentAbsolute, StringComparison.OrdinalIgnoreCase));
+            if (currentIndex < 0)
+                currentIndex = 0;
+
+            int previousIndex = (currentIndex - 1 + files.Count) % files.Count;
+            string previousAbsolute = files[previousIndex];
+
+            string relativePrevious = PathHelper.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, previousAbsolute);
+            SelectedUser.ImagePath = relativePrevious;
+
+            // Salvează modificările în fișierul JSON
+            userService.SaveUsers(new List<User>(Users));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
