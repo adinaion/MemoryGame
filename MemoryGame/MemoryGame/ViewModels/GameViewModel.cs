@@ -75,6 +75,20 @@ namespace MemoryGame.ViewModels
             }
         }
 
+        private int gameTimeSeconds;
+        public int GameTimeSeconds
+        {
+            get => gameTimeSeconds;
+            set
+            {
+                if (gameTimeSeconds != value)
+                {
+                    gameTimeSeconds = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         // Comenzile meniului
         public ICommand NewGameCommand { get; }
         public ICommand OpenGameCommand { get; }
@@ -99,6 +113,7 @@ namespace MemoryGame.ViewModels
             IsStandardSelected = true;
             CustomRows = 4;
             CustomColumns = 4;
+            GameTimeSeconds = 120;
 
             gameService = new GameService();
             gameLogicService = new GameLogicService();
@@ -123,7 +138,7 @@ namespace MemoryGame.ViewModels
             }
 
             // Creează un nou joc folosind logica din serviciu
-            Game newGame = gameLogicService.CreateNewGame(SelectedCategory, rows, columns, CurrentPlayer, 120);
+            Game newGame = gameLogicService.CreateNewGame(SelectedCategory, rows, columns, CurrentPlayer, GameTimeSeconds);
             // Salvare inițială, dacă e nevoie
             gameService.SaveGame(newGame);
 

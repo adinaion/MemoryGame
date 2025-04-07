@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\Adina\Desktop\MAP\teme\tema2\MemoryGame\MemoryGame\MemoryGame\App.xaml
 61597152412
 482133896774
-29935015718
+30-375118572
 198-556154604
 MainWindow.xaml;Views\GameBoardView.xaml;Views\GameView.xaml;Views\NewUserWindow.xaml;Views\SignInView.xaml;Views\StatisticsView.xaml;
 
-False
+True
 

@@ -8,6 +8,7 @@
         Title="Memory Game" Height="450" Width="800">
     <Window.Resources>
         <helpers:RelativePathToImageSourceConverter x:Key="RelativePathConverter"/>
+        <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </Window.Resources>
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
@@ -28,30 +29,29 @@
 
             <!-- Secțiunea Options -->
             <GroupBox Header="Options" Margin="0,20,0,0" Width="250">
-                <StackPanel>
+                <StackPanel Orientation="Vertical" Margin="0,5">
+                    <!-- Secțiunea pentru timpul de joc -->
                     <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <RadioButton x:Name="rbStandard" Content="Standard (4x4)" 
-                                     IsChecked="True" GroupName="GameOptions"
-                                     Checked="RbStandard_Checked"/>
-                        <RadioButton x:Name="rbCustom" Content="Custom" GroupName="GameOptions" 
-                                     Margin="20,0,0,0"
-                                     Checked="RbCustom_Checked"/>
+                        <TextBlock Text="Time (sec):" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox Width="60" Text="{Binding GameTimeSeconds, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                    <!-- Panelul Custom devine vizibil doar când rbCustom este selectat -->
+                    <!-- Secțiunea pentru selectarea modului de joc -->
                     <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=rbCustom, Path=IsChecked}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
+                        <RadioButton Content="Standard (4x4)" 
+                         GroupName="GameOptions"
+                         IsChecked="{Binding IsStandardSelected, Mode=TwoWay}" />
+                        <RadioButton Content="Custom"
+                         GroupName="GameOptions"
+                         Margin="20,0,0,0"
+                         IsChecked="{Binding IsStandardSelected, Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}" />
+                    </StackPanel>
+                    <!-- Secțiunea Custom devine vizibilă doar când modul Custom este activ -->
+                    <StackPanel Orientation="Horizontal" Margin="0,5"
+                    Visibility="{Binding IsStandardSelected, Converter={StaticResource InverseBooleanConverter}}">
                         <TextBlock Text="Rows:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                         <ComboBox x:Name="cbRows" Width="40" 
-                                  SelectedItem="{Binding CustomRows, UpdateSourceTrigger=PropertyChanged}">
+                                  SelectedValuePath="Content"
+                                  SelectedValue="{Binding CustomRows, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="3"/>
                             <ComboBoxItem Content="4"/>
@@ -60,7 +60,7 @@
                         </ComboBox>
                         <TextBlock Text="Columns:" VerticalAlignment="Center" Margin="10,0,5,0"/>
                         <ComboBox x:Name="cbColumns" Width="40" 
-                                  SelectedItem="{Binding CustomColumns, UpdateSourceTrigger=PropertyChanged}">
+                      SelectedItem="{Binding CustomColumns, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="3"/>
                             <ComboBoxItem Content="4"/>

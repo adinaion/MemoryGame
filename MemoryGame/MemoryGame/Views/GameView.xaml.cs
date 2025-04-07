@@ -26,21 +26,5 @@ namespace MemoryGame.Views
             DataContext = vm;
         }
 
-        // Evenimentele pentru RadioButton-uri: acestea rămân aici doar pentru a seta proprietățile din ViewModel.
-        private void RbStandard_Checked(object sender, RoutedEventArgs e)
-        {
-            if (vm != null)
-            {
-                vm.IsStandardSelected = true;
-            }
-        }
-
-        private void RbCustom_Checked(object sender, RoutedEventArgs e)
-        {
-            if (vm != null)
-            {
-                vm.IsStandardSelected = false;
-            }
-        }
     }
 }
