@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MemoryGame.ViewModels
 {
-    class StatisticsViewModel
+    public class StatisticsViewModel : BaseViewModel
     {
+        // Logica pentru statistici va fi implementată aici când vei avea un StatisticsService
     }
 }

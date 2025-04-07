@@ -7,72 +7,31 @@ using MemoryGame.Helpers;
 
 namespace MemoryGame.ViewModels
 {
-    public class TileViewModel : INotifyPropertyChanged
+    public class TileViewModel : BaseViewModel
     {
         public Tile Tile { get; private set; }
-        private bool canFlip = true; // Previi flip-ul repetat
-        public ICommand FlipCommand { get; }
+        // Indexul tile-ului în colecția de tile-uri (folosit pentru comanda de flip)
+        public int Index { get; private set; }
 
-        public TileViewModel(Tile tile)
+        // Comanda de flip este setată de părinte (GameBoardViewModel) prin binding la FlipTileCommand
+        public ICommand FlipCommand { get; set; }
+
+        public TileViewModel(Tile tile, int index)
         {
             Tile = tile;
-            FlipCommand = new RelayCommand(_ => Flip(), _ => canFlip && !Tile.IsFaceUp && !Tile.IsMatched);
+            Index = index;
         }
 
+        // Proprietatea ImagePath afișează imaginea corespunzătoare în funcție de starea tile-ului
         public string ImagePath
         {
-            get
-            {
-                // Dacă tile-ul este întors sau a fost găsit un match, afișează imaginea de față
-                return Tile.IsFaceUp || Tile.IsMatched ? Tile.ImagePath : "Images/back.jpg";
-            }
+            get => (Tile.IsFaceUp || Tile.IsMatched) ? Tile.ImagePath : "Images/back.jpg";
         }
 
-        // Eveniment pentru a notifica flip-ul către GameBoardViewModel
-        public event EventHandler TileFlipped;
-
-        private void Flip()
+        // Metodă simplă pentru actualizare – notifică schimbarea proprietății
+        public void Update()
         {
-            if (!canFlip || Tile.IsFaceUp || Tile.IsMatched)
-                return;
-
-            Tile.IsFaceUp = true;
             OnPropertyChanged(nameof(ImagePath));
-
-            // Dezactivează flip-ul imediat după ce a fost întors
-            canFlip = false;
-            (FlipCommand as RelayCommand)?.RaiseCanExecuteChanged();
-
-            // Notifică ViewModel-ul central
-            TileFlipped?.Invoke(this, EventArgs.Empty);
-        }
-
-        // Metodă pentru a reabilita posibilitatea de a flip-a
-        public void ResetFlip()
-        {
-            canFlip = true;
-            (FlipCommand as RelayCommand)?.RaiseCanExecuteChanged();
-        }
-
-        // Metodă pentru a întoarce tile-ul la starea facedown
-        public void ForceFlipDown()
-        {
-            Tile.IsFaceUp = false;
-            OnPropertyChanged(nameof(ImagePath));
-            ResetFlip();
-        }
-
-        // Marchează tile-ul ca fiind găsit (match)
-        public void SetMatched()
-        {
-            Tile.IsMatched = true;
-            OnPropertyChanged(nameof(ImagePath));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
     }
 }

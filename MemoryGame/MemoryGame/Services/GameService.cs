@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Text.Json;
 using MemoryGame.Models;
@@ -13,7 +9,6 @@ namespace MemoryGame.Services
     {
         private readonly string filePath = "game.json";
 
-        // Salvează starea jocului în fișierul game.json
         public void SaveGame(Game game)
         {
             try
@@ -23,11 +18,10 @@ namespace MemoryGame.Services
             }
             catch
             {
-                // Tratează eventualele excepții după necesitate
+                // Tratați excepțiile conform necesităților
             }
         }
 
-        // Încarcă starea jocului din fișierul game.json
         public Game LoadGame()
         {
             if (!File.Exists(filePath))

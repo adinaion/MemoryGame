@@ -16,14 +16,12 @@ using System.Windows.Shapes;
 
 namespace MemoryGame.Views
 {
-    /// <summary>
-    /// Interaction logic for GameBoardView.xaml
-    /// </summary>
     public partial class GameBoardView : Window
     {
         public GameBoardView(Game game)
         {
             InitializeComponent();
+            // DataContext-ul este setat în ViewModel, care apelează serviciile corespunzătoare.
             DataContext = new GameBoardViewModel(game);
         }
     }

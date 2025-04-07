@@ -14,10 +14,10 @@ using MemoryGame.Helpers;
 
 namespace MemoryGame.ViewModels
 {
-    public class SignInViewModel : INotifyPropertyChanged
+    public class SignInViewModel : BaseViewModel
     {
         private User selectedUser;
-        private UserService userService;
+        private readonly UserService userService;
 
         public ObservableCollection<User> Users { get; set; }
         public User SelectedUser
@@ -37,12 +37,13 @@ namespace MemoryGame.ViewModels
             }
         }
 
-        // Comenzile
         public ICommand NewUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
         public ICommand PlayCommand { get; }
         public ICommand NextImageCommand { get; }
         public ICommand PreviousImageCommand { get; }
+
+        public Action CloseAction { get; set; }
 
         public SignInViewModel()
         {
@@ -53,39 +54,30 @@ namespace MemoryGame.ViewModels
             NewUserCommand = new RelayCommand(NewUser);
             DeleteUserCommand = new RelayCommand(DeleteUser, CanModifyUser);
             PlayCommand = new RelayCommand(Play, CanModifyUser);
-
-            // Inițializarea noilor comenzi pentru schimbarea imaginii
             NextImageCommand = new RelayCommand(NextImage, CanChangeImage);
             PreviousImageCommand = new RelayCommand(PreviousImage, CanChangeImage);
         }
 
         private void NewUser(object parameter)
         {
-            var newUserWindow = new MemoryGame.Views.NewUserWindow();
+            var newUserWindow = new Views.NewUserWindow();
             if (newUserWindow.ShowDialog() == true)
             {
-                // Preluăm datele introduse
                 string userName = newUserWindow.UserName;
                 string absoluteImagePath = newUserWindow.ImagePath;
-
-                // Convertim calea absolută într-o cale relativă
-                // Pentru .NET Framework, folosește o metodă helper bazată pe Uri (vedea exemplul anterior)
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 string relativeImagePath = PathHelper.GetRelativePath(baseDir, absoluteImagePath);
 
-                // Creăm noul utilizator folosind clasa User din Models
                 var newUser = new User
                 {
                     Name = userName,
                     ImagePath = relativeImagePath
                 };
 
-                // Adăugăm utilizatorul în colecția Users și salvăm lista actualizată în fișierul JSON
                 Users.Add(newUser);
-                userService.SaveUsers(new List<User>(Users));
+                userService.SaveUsers(Users.ToList());
             }
         }
-
 
         private bool CanModifyUser(object parameter)
         {
@@ -97,28 +89,18 @@ namespace MemoryGame.ViewModels
             if (SelectedUser != null)
             {
                 Users.Remove(SelectedUser);
-                // Salvează lista actualizată în fișier
-                userService.SaveUsers(new List<User>(Users));
+                userService.SaveUsers(Users.ToList());
                 SelectedUser = null;
             }
         }
 
-        public Action CloseAction { get; set; }
-
         private void Play(object parameter)
         {
-            // Asigură-te că există un utilizator selectat
             if (SelectedUser == null)
                 return;
 
-            // Deschidem fereastra de joc
-            var gameView = new MemoryGame.Views.GameView();
-
-            // Dacă ai un GameViewModel, poți face:
-            // gameView.DataContext = new GameViewModel(SelectedUser);
-
+            var gameView = new Views.GameView();
             gameView.Show();
-
             CloseAction?.Invoke();
         }
 
@@ -146,21 +128,17 @@ namespace MemoryGame.ViewModels
             if (files.Count == 0)
                 return;
 
-            // Convertim calea relativă a imaginii curente în cale absolută
             string currentAbsolute = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, SelectedUser.ImagePath);
             int currentIndex = files.FindIndex(f => f.Equals(currentAbsolute, StringComparison.OrdinalIgnoreCase));
-
             if (currentIndex < 0)
                 currentIndex = 0;
 
             int nextIndex = (currentIndex + 1) % files.Count;
             string nextAbsolute = files[nextIndex];
-
             string relativeNext = PathHelper.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, nextAbsolute);
             SelectedUser.ImagePath = relativeNext;
 
-            // Salvează modificările în fișierul JSON
-            userService.SaveUsers(new List<User>(Users));
+            userService.SaveUsers(Users.ToList());
         }
 
         private void PreviousImage(object parameter)
@@ -189,18 +167,11 @@ namespace MemoryGame.ViewModels
 
             int previousIndex = (currentIndex - 1 + files.Count) % files.Count;
             string previousAbsolute = files[previousIndex];
-
             string relativePrevious = PathHelper.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, previousAbsolute);
             SelectedUser.ImagePath = relativePrevious;
 
-            // Salvează modificările în fișierul JSON
-            userService.SaveUsers(new List<User>(Users));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            userService.SaveUsers(Users.ToList());
         }
     }
 }
+

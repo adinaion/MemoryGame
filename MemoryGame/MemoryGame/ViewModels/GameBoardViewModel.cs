@@ -9,127 +9,96 @@ using System.Windows.Input;
 using MemoryGame.Helpers;
 using MemoryGame.Models;
 using MemoryGame.Services;
+using System.Linq;
 
 namespace MemoryGame.ViewModels
 {
-    public class GameBoardViewModel : INotifyPropertyChanged
+    public class GameBoardViewModel : BaseViewModel
     {
-        private Game currentGame;
+        private readonly GameLogicService gameLogicService;
+        private readonly Game currentGame;
+        private readonly DispatcherTimer gameTimer;
+        private TimeSpan timeRemaining;
+
+        // Pentru identificarea tile-urilor selectate (indicele în colecție)
+        private int? firstSelectedIndex;
+        private int? secondSelectedIndex;
+
         public ObservableCollection<TileViewModel> Tiles { get; set; }
         public int Rows { get; private set; }
         public int Columns { get; private set; }
         public ICommand SaveGameCommand { get; }
+        public ICommand FlipTileCommand { get; }
 
-        private DispatcherTimer gameTimer;
-        private TimeSpan timeRemaining;
-
-        // Afișează timpul rămas în format mm:ss
         public string TimerText => timeRemaining.ToString(@"mm\:ss");
-
-        // Variabile pentru gestionarea selecției a două tile-uri
-        private TileViewModel firstSelectedTile;
-        private TileViewModel secondSelectedTile;
 
         public GameBoardViewModel(Game game)
         {
             currentGame = game;
             Rows = game.Rows;
             Columns = game.Columns;
-            Tiles = new ObservableCollection<TileViewModel>();
 
-            // Creează view model-uri pentru fiecare tile și le ascultă evenimentul de flip
-            foreach (var tile in currentGame.Tiles)
+            // Inițializăm serviciul de logică
+            gameLogicService = new GameLogicService();
+
+            // Construim colecția de TileViewModel – acestea sunt „simple” și nu conțin logică proprie.
+            Tiles = new ObservableCollection<TileViewModel>(
+                currentGame.Tiles.Select((tile, index) => new TileViewModel(tile, index))
+            );
+
+            // Comanda de flip va primi ca parametru indicele tile-ului
+            FlipTileCommand = new RelayCommand(param =>
             {
-                var tileVM = new TileViewModel(tile);
-                tileVM.TileFlipped += OnTileFlipped;
-                Tiles.Add(tileVM);
-            }
+                if (int.TryParse(param.ToString(), out int tileIndex))
+                {
+                    gameLogicService.FlipTile(currentGame, tileIndex, ref firstSelectedIndex, ref secondSelectedIndex);
+                    // După ce s-a efectuat flip-ul, actualizăm toate tile-urile
+                    UpdateTiles();
+                }
+            }, param => true);
 
             SaveGameCommand = new RelayCommand(_ => SaveGame());
 
-            // Inițializează timer-ul cu timpul rămas din starea jocului
+            // Setăm timerul. Pentru UI, păstrăm logica de actualizare a timer-ului aici.
             timeRemaining = TimeSpan.FromSeconds(currentGame.TimeRemainingSeconds);
-            StartGameTimer();
-        }
-
-        private void StartGameTimer()
-        {
             gameTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             gameTimer.Tick += (s, e) =>
             {
                 if (timeRemaining.TotalSeconds > 0)
                 {
+                    // Opțional, putem delega scăderea timpului unui TimerService
                     timeRemaining = timeRemaining.Subtract(TimeSpan.FromSeconds(1));
-                    OnPropertyChanged(nameof(TimerText));
-                    // Actualizează starea jocului
                     currentGame.TimeRemainingSeconds = (int)timeRemaining.TotalSeconds;
+                    OnPropertyChanged(nameof(TimerText));
                 }
                 else
                 {
                     gameTimer.Stop();
-                    MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Time Over", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    // Opțional: dezactivează interacțiunea cu tile-urile
+                    MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Time Over",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             };
             gameTimer.Start();
         }
 
-        // Evenimentul declanșat atunci când un tile este întors
-        private async void OnTileFlipped(object sender, EventArgs e)
-        {
-            var tileVM = sender as TileViewModel;
-            if (tileVM == null)
-                return;
-
-            // Previne selectarea aceluiași tile de două ori
-            if (firstSelectedTile == tileVM || secondSelectedTile == tileVM)
-                return;
-
-            if (firstSelectedTile == null)
-            {
-                firstSelectedTile = tileVM;
-            }
-            else if (secondSelectedTile == null)
-            {
-                secondSelectedTile = tileVM;
-                await CompareTiles();
-            }
-        }
-
-        private async Task CompareTiles()
-        {
-            // Compară imaginile celor două tile-uri întoarse
-            if (firstSelectedTile.Tile.ImagePath == secondSelectedTile.Tile.ImagePath)
-            {
-                firstSelectedTile.SetMatched();
-                secondSelectedTile.SetMatched();
-            }
-            else
-            {
-                // Așteaptă 1 secundă pentru ca utilizatorul să vadă tile-urile
-                await Task.Delay(1000);
-                firstSelectedTile.ForceFlipDown();
-                secondSelectedTile.ForceFlipDown();
-            }
-            // Resetează selecția
-            firstSelectedTile.ResetFlip();
-            secondSelectedTile.ResetFlip();
-            firstSelectedTile = null;
-            secondSelectedTile = null;
-        }
-
         private void SaveGame()
         {
-            // Salvează starea curentă a jocului
-            GameService gameService = new GameService();
+            // Apelăm serviciul de salvare
+            var gameService = new GameService();
             gameService.SaveGame(currentGame);
             MessageBox.Show("Game saved successfully.", "Save Game", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propName = null)
+        /// <summary>
+        /// Actualizează starea fiecărui TileViewModel pe baza modelului
+        /// </summary>
+        private void UpdateTiles()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            // Se actualizează fiecare TileViewModel; de ex., se notifică schimbările pentru ImagePath
+            foreach (var tileVM in Tiles)
+            {
+                tileVM.Update();
+            }
         }
     }
 }

@@ -13,12 +13,11 @@ using MemoryGame.Services;
 
 namespace MemoryGame.ViewModels
 {
-    public class GameViewModel : INotifyPropertyChanged
+    public class GameViewModel : BaseViewModel
     {
-        // Utilizatorul curent (asociază-l după login, dacă ai un mecanism de autentificare)
+        // Utilizatorul curent (setat după login)
         public User CurrentPlayer { get; set; }
 
-        // Lista de categorii și categoria selectată
         public ObservableCollection<string> Categories { get; set; }
         private string selectedCategory;
         public string SelectedCategory
@@ -34,7 +33,6 @@ namespace MemoryGame.ViewModels
             }
         }
 
-        // Proprietăți pentru modul de joc: standard vs. custom
         private bool isStandardSelected;
         public bool IsStandardSelected
         {
@@ -85,6 +83,7 @@ namespace MemoryGame.ViewModels
         public ICommand ExitCommand { get; }
 
         private readonly GameService gameService;
+        private readonly GameLogicService gameLogicService;
 
         public GameViewModel()
         {
@@ -95,16 +94,14 @@ namespace MemoryGame.ViewModels
                 "Category 2",
                 "Category 3"
             };
-            SelectedCategory = Categories[0];
+            SelectedCategory = Categories.First();
 
-            // Modul standard este selectat implicit
             IsStandardSelected = true;
-
-            // Valorile custom implicite
             CustomRows = 4;
             CustomColumns = 4;
 
             gameService = new GameService();
+            gameLogicService = new GameLogicService();
 
             NewGameCommand = new RelayCommand(_ => NewGame());
             OpenGameCommand = new RelayCommand(_ => OpenGame());
@@ -118,7 +115,6 @@ namespace MemoryGame.ViewModels
             int rows = IsStandardSelected ? 4 : CustomRows;
             int columns = IsStandardSelected ? 4 : CustomColumns;
 
-            // Verifică dacă numărul total de tile-uri este par
             if ((rows * columns) % 2 != 0)
             {
                 MessageBox.Show("The total number of tiles must be even. Please adjust the dimensions.",
@@ -126,26 +122,15 @@ namespace MemoryGame.ViewModels
                 return;
             }
 
-            // Inițializează un nou joc și asociază utilizatorul logat
-            Game newGame = new Game
-            {
-                Category = SelectedCategory,
-                Rows = rows,
-                Columns = columns,
-                Player = CurrentPlayer,
-                TimeRemainingSeconds = 120 // Exemplu: 2 minute
-            };
-
-            // Generează tile-urile pentru joc
-            newGame.Tiles = GenerateTiles(SelectedCategory, rows, columns);
-
-            // Salvează jocul
+            // Creează un nou joc folosind logica din serviciu
+            Game newGame = gameLogicService.CreateNewGame(SelectedCategory, rows, columns, CurrentPlayer, 120);
+            // Salvare inițială, dacă e nevoie
             gameService.SaveGame(newGame);
 
             MessageBox.Show($"New Game started!\nCategory: {newGame.Category}\nDimensions: {newGame.Rows}x{newGame.Columns}",
                 "New Game", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // Deschide fereastra de joc și transmite jocul curent
+            // Deschide fereastra de joc
             var gameBoardView = new Views.GameBoardView(newGame);
             gameBoardView.Show();
         }
@@ -179,68 +164,13 @@ namespace MemoryGame.ViewModels
 
         private void Exit()
         {
-            Application.Current.Shutdown();
-        }
-
-        // Metodă pentru generarea tile-urilor cu imagini în perechi și ordonare aleatorie
-        private List<Tile> GenerateTiles(string category, int rows, int columns)
-        {
-            // Mapează numele categoriei la numele folderului
-            // "Category 1" -> "Category1", "Category 2" -> "Category2" etc.
-            string folderName = "Category1";
-            if (category == "Category 1")
-                folderName = "Category1";
-            else if (category == "Category 2")
-                folderName = "Category2";
-            else if (category == "Category 3")
-                folderName = "Category3";
-
-            // Construiește calea completă către folder
-            string categoryFolderPath = System.IO.Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Resources", "Data", "Images", folderName);
-
-            // Obține toate fișierele .jpg din folder
-            // (dacă ai și alte extensii, ex. .png, .jpeg, etc., ajustează filtrul)
-            var imageFiles = Directory.GetFiles(categoryFolderPath, "*.jpg");
-
-            int totalTiles = rows * columns;
-            int pairsNeeded = totalTiles / 2;
-
-            // Dacă nu ai suficiente imagini, ar trebui fie să afișezi un mesaj,
-            // fie să refolosești imaginile. Aici, ca exemplu, ne asigurăm că
-            // nu selectăm mai multe imagini decât avem disponibile.
-            if (imageFiles.Length < pairsNeeded)
+            var gameView = Application.Current.Windows.OfType<Views.GameView>().FirstOrDefault();
+            if (gameView != null)
             {
-                MessageBox.Show("Not enough images in the selected category folder!",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                // Returnează o listă goală sau aruncă excepție
-                return new List<Tile>();
+                gameView.Hide();
             }
-
-            // Selectează aleator perechile necesare
-            Random random = new Random();
-            var selectedImages = imageFiles
-                .OrderBy(x => random.Next())
-                .Take(pairsNeeded)
-                .ToList();
-
-            List<Tile> tiles = new List<Tile>();
-            foreach (var imgPath in selectedImages)
-            {
-                // Adaugă fiecare imagine de două ori (pentru perechi)
-                tiles.Add(new Tile { ImagePath = imgPath, IsFaceUp = false, IsMatched = false });
-                tiles.Add(new Tile { ImagePath = imgPath, IsFaceUp = false, IsMatched = false });
-            }
-
-            // Amestecă tile-urile înainte de a le returna
-            return tiles.OrderBy(x => random.Next()).ToList();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            var signInView = new Views.SignInView();
+            signInView.Show();
         }
     }
 }

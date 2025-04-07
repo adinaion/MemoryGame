@@ -15,9 +15,6 @@ using MemoryGame.ViewModels;
 
 namespace MemoryGame.Views
 {
-    /// <summary>
-    /// Interaction logic for GameView.xaml
-    /// </summary>
     public partial class GameView : Window
     {
         private GameViewModel vm;
@@ -29,7 +26,7 @@ namespace MemoryGame.Views
             DataContext = vm;
         }
 
-        // Dacă vrei să schimbi modul standard/custom prin evenimente:
+        // Evenimentele pentru RadioButton-uri: acestea rămân aici doar pentru a seta proprietățile din ViewModel.
         private void RbStandard_Checked(object sender, RoutedEventArgs e)
         {
             if (vm != null)
