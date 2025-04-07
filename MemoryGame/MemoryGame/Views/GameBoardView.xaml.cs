@@ -21,8 +21,9 @@ namespace MemoryGame.Views
         public GameBoardView(Game game)
         {
             InitializeComponent();
-            // DataContext-ul este setat în ViewModel, care apelează serviciile corespunzătoare.
-            DataContext = new GameBoardViewModel(game);
+            var vm = new GameBoardViewModel(game);
+            vm.CloseAction = new Action(() => this.Close());
+            DataContext = vm;
         }
     }
 }

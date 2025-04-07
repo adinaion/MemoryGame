@@ -31,6 +31,8 @@ namespace MemoryGame.ViewModels
         public ICommand FlipTileCommand { get; }
 
         public string TimerText => timeRemaining.ToString(@"mm\:ss");
+        
+        public Action CloseAction { get; set; }
 
         public GameBoardViewModel(Game game)
         {
@@ -60,6 +62,7 @@ namespace MemoryGame.ViewModels
                     {
                         gameTimer.Stop();
                         MessageBox.Show("Felicitări! Ai câștigat jocul!", "Game Won", MessageBoxButton.OK, MessageBoxImage.Information);
+                        CloseAction?.Invoke();
                     }
                 }
             }, param => true);
@@ -85,6 +88,7 @@ namespace MemoryGame.ViewModels
                     if (!gameLogicService.IsGameWon(currentGame))
                     {
                         MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Game Over", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        CloseAction?.Invoke();
                     }
                 }
             };
