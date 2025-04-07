@@ -62,5 +62,16 @@ namespace MemoryGame.Services
             else
                 return null;
         }
+
+        public void DeleteGame(string userName)
+        {
+            var games = LoadAllGames();
+            if (games.ContainsKey(userName))
+            {
+                games.Remove(userName);
+                SaveAllGames(games);
+            }
+        }
+
     }
 }

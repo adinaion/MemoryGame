@@ -11,6 +11,7 @@ using System.Windows.Input;
 using MemoryGame.Models;
 using MemoryGame.Services;
 using MemoryGame.Helpers;
+using System.Windows;
 
 namespace MemoryGame.ViewModels
 {
@@ -88,8 +89,20 @@ namespace MemoryGame.ViewModels
         {
             if (SelectedUser != null)
             {
+                string userName = SelectedUser.Name;
+
+                // Șterge utilizatorul din lista locală și salvează lista actualizată
                 Users.Remove(SelectedUser);
                 userService.SaveUsers(Users.ToList());
+
+                // Șterge jocul salvat al utilizatorului (dacă există)
+                var gameService = new GameService();
+                gameService.DeleteGame(userName);
+
+                // Șterge statisticile asociate utilizatorului (dacă există)
+                var statisticsService = new StatisticsService();
+                statisticsService.DeleteStatistics(userName);
+
                 SelectedUser = null;
             }
         }

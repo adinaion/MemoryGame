@@ -174,8 +174,8 @@ namespace MemoryGame.ViewModels
 
         private void ShowStatistics()
         {
-            MessageBox.Show("Statistics functionality not yet implemented.", "Statistics",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            var statsView = new Views.StatisticsView();
+            statsView.Show();
         }
 
         private void ShowAbout()

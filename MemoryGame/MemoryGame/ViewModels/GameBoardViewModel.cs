@@ -24,6 +24,8 @@ namespace MemoryGame.ViewModels
         private int? firstSelectedIndex;
         private int? secondSelectedIndex;
 
+        private bool gameEnded = false;
+
         public ObservableCollection<TileViewModel> Tiles { get; set; }
         public int Rows { get; private set; }
         public int Columns { get; private set; }
@@ -31,7 +33,7 @@ namespace MemoryGame.ViewModels
         public ICommand FlipTileCommand { get; }
 
         public string TimerText => timeRemaining.ToString(@"mm\:ss");
-        
+
         public Action CloseAction { get; set; }
 
         public GameBoardViewModel(Game game)
@@ -58,8 +60,13 @@ namespace MemoryGame.ViewModels
                     UpdateTiles();
 
                     // Verifică dacă jocul este câștigat
-                    if (gameLogicService.IsGameWon(currentGame))
+                    if (gameLogicService.IsGameWon(currentGame) && !gameEnded)
                     {
+                        gameEnded = true;
+                        // Actualizează statisticile: joc câștigat
+                        var statService = new StatisticsService();
+                        statService.UpdateStatistics(currentGame.Player.Name, true);
+
                         gameTimer.Stop();
                         MessageBox.Show("Felicitări! Ai câștigat jocul!", "Game Won", MessageBoxButton.OK, MessageBoxImage.Information);
                         CloseAction?.Invoke();
@@ -81,15 +88,17 @@ namespace MemoryGame.ViewModels
                     currentGame.TimeRemainingSeconds = (int)timeRemaining.TotalSeconds;
                     OnPropertyChanged(nameof(TimerText));
                 }
-                else
+                else if (!gameEnded)
                 {
+                    gameEnded = true;
+                    // Actualizează statisticile: joc pierdut (doar joc jucat)
+                    var statService = new StatisticsService();
+                    statService.UpdateStatistics(currentGame.Player.Name, false);
+
                     gameTimer.Stop();
-                    // Dacă jocul nu este câștigat, atunci timpul expirat înseamnă că jocul este pierdut
-                    if (!gameLogicService.IsGameWon(currentGame))
-                    {
-                        MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Game Over", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        CloseAction?.Invoke();
-                    }
+                    MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Game Over", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    CloseAction?.Invoke();
+
                 }
             };
             gameTimer.Start();
