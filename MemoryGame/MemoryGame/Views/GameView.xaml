@@ -60,7 +60,8 @@
                         </ComboBox>
                         <TextBlock Text="Columns:" VerticalAlignment="Center" Margin="10,0,5,0"/>
                         <ComboBox x:Name="cbColumns" Width="40" 
-                      SelectedItem="{Binding CustomColumns, UpdateSourceTrigger=PropertyChanged}">
+                                  SelectedValuePath="Content"
+                                  SelectedValue="{Binding CustomColumns, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="3"/>
                             <ComboBoxItem Content="4"/>
