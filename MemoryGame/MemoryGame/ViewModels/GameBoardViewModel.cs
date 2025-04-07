@@ -54,6 +54,13 @@ namespace MemoryGame.ViewModels
                     gameLogicService.FlipTile(currentGame, tileIndex, ref firstSelectedIndex, ref secondSelectedIndex);
                     // După ce s-a efectuat flip-ul, actualizăm toate tile-urile
                     UpdateTiles();
+
+                    // Verifică dacă jocul este câștigat
+                    if (gameLogicService.IsGameWon(currentGame))
+                    {
+                        gameTimer.Stop();
+                        MessageBox.Show("Felicitări! Ai câștigat jocul!", "Game Won", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
             }, param => true);
 
@@ -74,8 +81,11 @@ namespace MemoryGame.ViewModels
                 else
                 {
                     gameTimer.Stop();
-                    MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Time Over",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    // Dacă jocul nu este câștigat, atunci timpul expirat înseamnă că jocul este pierdut
+                    if (!gameLogicService.IsGameWon(currentGame))
+                    {
+                        MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Game Over", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
             };
             gameTimer.Start();

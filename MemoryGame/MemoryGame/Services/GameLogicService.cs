@@ -111,6 +111,21 @@ namespace MemoryGame.Services
                 // Dacă nu se potrivesc, se vor întoarce la apăsarea unui alt tile (conform logicii de mai sus)
             }
         }
+
+        // Metodă pentru verificarea unui joc câștigat
+        public bool IsGameWon(Game game)
+        {
+            // Jocul este câștigat dacă toate tile-urile sunt marcate ca fiind potrivite.
+            return game.Tiles.All(tile => tile.IsMatched);
+        }
+
+        // Metodă pentru verificarea unui joc pierdut
+        // Aceasta poate fi apelată, de exemplu, atunci când timpul s-a scurs.
+        public bool IsGameLost(Game game)
+        {
+            // În mod implicit, dacă timpul a expirat, jocul este pierdut.
+            return game.TimeRemainingSeconds <= 0;
+        }
     }
 }
 
