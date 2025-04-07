@@ -99,7 +99,7 @@ namespace MemoryGame.ViewModels
             if (SelectedUser == null)
                 return;
 
-            var gameView = new Views.GameView();
+            var gameView = new Views.GameView(SelectedUser);
             gameView.Show();
             CloseAction?.Invoke();
         }

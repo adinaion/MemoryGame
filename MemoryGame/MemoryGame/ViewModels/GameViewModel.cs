@@ -152,7 +152,14 @@ namespace MemoryGame.ViewModels
 
         private void OpenGame()
         {
-            Game loadedGame = gameService.LoadGame();
+            if (CurrentPlayer == null)
+            {
+                MessageBox.Show("No current player found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Încarcă jocul salvat pentru utilizatorul curent
+            Game loadedGame = gameService.LoadGame(CurrentPlayer.Name);
             if (loadedGame != null)
             {
                 MessageBox.Show("Game loaded successfully.", "Open Game", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -161,7 +168,7 @@ namespace MemoryGame.ViewModels
             }
             else
             {
-                MessageBox.Show("No saved game found.", "Open Game", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No saved game found for the current user.", "Open Game", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

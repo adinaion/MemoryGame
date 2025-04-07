@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MemoryGame.Models;
 using MemoryGame.ViewModels;
 
 namespace MemoryGame.Views
@@ -26,5 +27,13 @@ namespace MemoryGame.Views
             DataContext = vm;
         }
 
+        // Nou constructor care primește utilizatorul curent
+        public GameView(User currentUser)
+        {
+            InitializeComponent();
+            vm = new GameViewModel();
+            vm.CurrentPlayer = currentUser;
+            DataContext = vm;
+        }
     }
 }
