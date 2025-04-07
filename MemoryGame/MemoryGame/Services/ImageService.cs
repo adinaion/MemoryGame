@@ -14,7 +14,7 @@ namespace MemoryGame.Services
         {
             // Presupunem că numele folderului este format din numele categoriei fără spații
             string folderName = category.Replace(" ", "");
-            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Data", "Images", folderName);
+            string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Images", folderName);
 
             if (!Directory.Exists(folderPath))
                 return new List<string>();

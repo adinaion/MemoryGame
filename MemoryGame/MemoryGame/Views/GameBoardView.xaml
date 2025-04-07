@@ -22,7 +22,9 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <!-- Fiecare tile este reprezentat printr-un buton -->
-                    <Button Command="{Binding FlipCommand}" Margin="5" Width="100" Height="100">
+                    <Button Command="{Binding DataContext.FlipTileCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding Index}"
+                            Margin="5" Width="100" Height="100">
                         <Button.Content>
                             <Image Source="{Binding ImagePath, Converter={StaticResource RelativePathConverter}}" Stretch="Uniform"/>
                         </Button.Content>
