@@ -10,7 +10,6 @@ namespace MemoryGame.Views
     public partial class NewUserWindow : Window
     {
         public string UserName { get; private set; }
-        // Vom păstra calea absolută a imaginii selectate; ViewModel-ul va converti în relativă.
         public string ImagePath { get; private set; }
 
         private List<string> availableImages;
@@ -25,11 +24,9 @@ namespace MemoryGame.Views
 
         private void LoadAvailableImages()
         {
-            // Setează calea către folderul cu imagini, de ex. "Resources\Data"
             string imagesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Data");
             if (Directory.Exists(imagesFolder))
             {
-                // Caută fișiere cu extensiile specifice
                 availableImages = Directory.GetFiles(imagesFolder, "*.jpg").ToList();
                 availableImages.AddRange(Directory.GetFiles(imagesFolder, "*.png"));
                 availableImages.AddRange(Directory.GetFiles(imagesFolder, "*.gif"));
@@ -47,7 +44,6 @@ namespace MemoryGame.Views
             {
                 string currentImagePath = availableImages[currentImageIndex];
                 imgSelected.Source = new BitmapImage(new Uri(currentImagePath));
-                // Păstrăm calea absolută a imaginii selectate
                 ImagePath = currentImagePath;
             }
         }
@@ -75,7 +71,6 @@ namespace MemoryGame.Views
             if (!string.IsNullOrWhiteSpace(txtUserName.Text) && availableImages.Count > 0)
             {
                 UserName = txtUserName.Text;
-                // ImagePath este deja setată în DisplayCurrentImage
                 DialogResult = true;
             }
             else

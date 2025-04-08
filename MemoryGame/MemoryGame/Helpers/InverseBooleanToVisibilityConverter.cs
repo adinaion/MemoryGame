@@ -7,7 +7,6 @@ namespace MemoryGame.Helpers
 {
     public class InverseBooleanToVisibilityConverter : IValueConverter
     {
-        // Dacă valoarea este true, va returna Collapsed, iar dacă este false, va returna Visible.
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool boolValue = (value is bool b && b);

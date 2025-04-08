@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace MemoryGame.Views
 {
-    /// <summary>
-    /// Interaction logic for SignInView.xaml
-    /// </summary>
     public partial class SignInView : Window
     {
         public SignInView()

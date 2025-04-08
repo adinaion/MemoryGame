@@ -20,7 +20,6 @@ namespace MemoryGame.ViewModels
         private readonly DispatcherTimer gameTimer;
         private TimeSpan timeRemaining;
 
-        // Pentru identificarea tile-urilor selectate (indicele în colecție)
         private int? firstSelectedIndex;
         private int? secondSelectedIndex;
 
@@ -42,28 +41,22 @@ namespace MemoryGame.ViewModels
             Rows = game.Rows;
             Columns = game.Columns;
 
-            // Inițializăm serviciul de logică
             gameLogicService = new GameLogicService();
 
-            // Construim colecția de TileViewModel – acestea sunt „simple” și nu conțin logică proprie.
             Tiles = new ObservableCollection<TileViewModel>(
                 currentGame.Tiles.Select((tile, index) => new TileViewModel(tile, index))
             );
 
-            // Comanda de flip va primi ca parametru indicele tile-ului
             FlipTileCommand = new RelayCommand(param =>
             {
                 if (int.TryParse(param.ToString(), out int tileIndex))
                 {
                     gameLogicService.FlipTile(currentGame, tileIndex, ref firstSelectedIndex, ref secondSelectedIndex);
-                    // După ce s-a efectuat flip-ul, actualizăm toate tile-urile
                     UpdateTiles();
 
-                    // Verifică dacă jocul este câștigat
                     if (gameLogicService.IsGameWon(currentGame) && !gameEnded)
                     {
                         gameEnded = true;
-                        // Actualizează statisticile: joc câștigat
                         var statService = new StatisticsService();
                         statService.UpdateStatistics(currentGame.Player.Name, true);
 
@@ -76,14 +69,12 @@ namespace MemoryGame.ViewModels
 
             SaveGameCommand = new RelayCommand(_ => SaveGame());
 
-            // Setăm timerul. Pentru UI, păstrăm logica de actualizare a timer-ului aici.
             timeRemaining = TimeSpan.FromSeconds(currentGame.TimeRemainingSeconds);
             gameTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             gameTimer.Tick += (s, e) =>
             {
                 if (timeRemaining.TotalSeconds > 0)
                 {
-                    // Opțional, putem delega scăderea timpului unui TimerService
                     timeRemaining = timeRemaining.Subtract(TimeSpan.FromSeconds(1));
                     currentGame.TimeRemainingSeconds = (int)timeRemaining.TotalSeconds;
                     OnPropertyChanged(nameof(TimerText));
@@ -91,7 +82,6 @@ namespace MemoryGame.ViewModels
                 else if (!gameEnded)
                 {
                     gameEnded = true;
-                    // Actualizează statisticile: joc pierdut (doar joc jucat)
                     var statService = new StatisticsService();
                     statService.UpdateStatistics(currentGame.Player.Name, false);
 
@@ -106,18 +96,13 @@ namespace MemoryGame.ViewModels
 
         private void SaveGame()
         {
-            // Apelăm serviciul de salvare
             var gameService = new GameService();
             gameService.SaveGame(currentGame);
             MessageBox.Show("Game saved successfully.", "Save Game", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        /// <summary>
-        /// Actualizează starea fiecărui TileViewModel pe baza modelului
-        /// </summary>
         private void UpdateTiles()
         {
-            // Se actualizează fiecare TileViewModel; de ex., se notifică schimbările pentru ImagePath
             foreach (var tileVM in Tiles)
             {
                 tileVM.Update();

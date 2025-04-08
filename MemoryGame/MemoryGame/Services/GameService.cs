@@ -9,7 +9,6 @@ namespace MemoryGame.Services
     {
         private readonly string filePath = "savedGames.json";
 
-        // Metodă internă pentru a încărca toate jocurile salvate din fișier
         private Dictionary<string, Game> LoadAllGames()
         {
             if (!File.Exists(filePath))
@@ -23,12 +22,10 @@ namespace MemoryGame.Services
             }
             catch
             {
-                // În caz de eroare, returnăm un dicționar gol
                 return new Dictionary<string, Game>();
             }
         }
 
-        // Metodă internă pentru a salva toate jocurile în fișier
         private void SaveAllGames(Dictionary<string, Game> games)
         {
             try
@@ -38,22 +35,16 @@ namespace MemoryGame.Services
             }
             catch
             {
-                // Tratați eventualele excepții după necesitate
             }
         }
 
-        // Metoda publică pentru salvarea unui joc pentru utilizatorul curent
         public void SaveGame(Game game)
         {
-            // Încarcă jocurile existente
             var games = LoadAllGames();
-            // Actualizează sau adaugă jocul pentru utilizator (suprascrie dacă există)
             games[game.Player.Name] = game;
-            // Salvează din nou toate jocurile
             SaveAllGames(games);
         }
 
-        // Metoda publică pentru încărcarea jocului salvate al unui utilizator
         public Game LoadGame(string userName)
         {
             var games = LoadAllGames();

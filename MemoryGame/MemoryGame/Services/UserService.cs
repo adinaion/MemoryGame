@@ -28,7 +28,6 @@ namespace MemoryGame.Services
             }
             catch (Exception ex)
             {
-                // Poți adăuga logare sau tratarea excepțiilor după necesitate
                 return new List<User>();
             }
         }
@@ -42,7 +41,6 @@ namespace MemoryGame.Services
             }
             catch (Exception ex)
             {
-                // Tratează eventualele excepții aici
             }
         }
     }

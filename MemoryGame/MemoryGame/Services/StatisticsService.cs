@@ -39,12 +39,9 @@ namespace MemoryGame.Services
             }
             catch
             {
-                // Tratați excepțiile după necesitate
             }
         }
 
-        // Metodă de actualizare: dacă jucătorul a câștigat, se incrementează atât GamesPlayed cât și GamesWon,
-        // iar dacă a pierdut, se incrementează doar GamesPlayed.
         public void UpdateStatistics(string userName, bool won)
         {
             var stats = LoadAllStatistics();
@@ -66,17 +63,13 @@ namespace MemoryGame.Services
             SaveAllStatistics(stats);
         }
 
-        // Returnează lista tuturor statisticilor pentru afișare.
         public List<PlayerStatistics> GetAllStatistics()
         {
-            // Încarcă statisticile existente din fișier
             var stats = LoadAllStatistics();
 
-            // Încarcă lista de utilizatori
             var userService = new UserService();
             var users = userService.LoadUsers();
 
-            // Pentru fiecare utilizator, dacă nu există statistică, adaugă o intrare implicită
             foreach (var user in users)
             {
                 if (!stats.ContainsKey(user.Name))

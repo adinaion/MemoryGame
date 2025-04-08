@@ -12,7 +12,6 @@ namespace MemoryGame.Services
     {
         public List<string> LoadImagePathsFromCategory(string category)
         {
-            // Presupunem că numele folderului este format din numele categoriei fără spații
             string folderName = category.Replace(" ", "");
             string folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Images", folderName);
 

@@ -11,25 +11,17 @@
         <helpers:RelativePathToImageSourceConverter x:Key="RelativePathConverter"/>
     </Window.Resources>
     <Grid Margin="10">
-        <!-- Definim structura grid-ului: 3 randuri, 3 coloane (coloana din mijloc e pentru spatiu, daca doresti) -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- pentru textul de titlu -->
             <RowDefinition/>
-            <!-- zona principală (ListBox + imagine) -->
             <RowDefinition Height="Auto"/>
-            <!-- pentru butoane -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
-            <!-- stanga: listbox -->
             <ColumnDefinition Width="Auto"/>
-            <!-- spatiu/coloana de separare -->
             <ColumnDefinition Width="2*"/>
-            <!-- dreapta: imagine/profil -->
         </Grid.ColumnDefinitions>
 
-        <!-- 1) Text de întâmpinare -->
         <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
                    Text="Wellcome! Enjoy this game!"
                    FontSize="16"
@@ -37,11 +29,9 @@
                    HorizontalAlignment="Center"
                    Margin="0,0,0,10"/>
 
-        <!-- 2) ListBox cu utilizatorii existenți, pe coloana 0 -->
         <ListBox Grid.Row="1" Grid.Column="0" Margin="0,0,10,0"
                  ItemsSource="{Binding Users}" 
                  SelectedItem="{Binding SelectedUser}">
-            <!-- Poți afisa doar numele, sau poți face un DataTemplate cu imagine + nume -->
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" />
@@ -49,21 +39,17 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <!-- 3) Imaginea utilizatorului selectat, pe coloana 2 -->
         <StackPanel Grid.Row="1" Grid.Column="2" 
                     HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="{Binding SelectedUser.ImagePath, Converter={StaticResource RelativePathConverter}}"
                   Width="150" Height="150"
                   Stretch="Uniform" />
-            <!-- Butoanele << si >> sunt opționale: pot fi folosite la selectarea 
-                 unei alte imagini dintr-un folder, înainte de a crea userul -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                 <Button Content="left" Command="{Binding PreviousImageCommand}" Margin="5"/>
                 <Button Content="right" Command="{Binding NextImageCommand}" Margin="5"/>
             </StackPanel>
         </StackPanel>
 
-        <!-- 4) Butoane: New User, Delete User, Play, Cancel (pe rândul de jos) -->
         <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal" 
                     HorizontalAlignment="Center" Margin="0,10,0,0">
             <Button Content="New User"

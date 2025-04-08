@@ -27,7 +27,6 @@ namespace MemoryGame.Views
             DataContext = vm;
         }
 
-        // Nou constructor care primește utilizatorul curent
         public GameView(User currentUser)
         {
             InitializeComponent();

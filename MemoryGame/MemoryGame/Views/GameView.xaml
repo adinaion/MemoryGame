@@ -9,12 +9,10 @@
     <Window.Resources>
         <helpers:RelativePathToImageSourceConverter x:Key="RelativePathConverter"/>
         <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-        <!-- Adăugăm noul converter -->
         <helpers:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
     </Window.Resources>
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <!-- Selecția categoriei -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock Text="Category:" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <ComboBox x:Name="cbCategory" Width="150" 
@@ -22,22 +20,18 @@
                           SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" />
             </StackPanel>
 
-            <!-- Butoanele principale -->
             <Button Content="New Game" Width="150" Margin="0,5" Command="{Binding NewGameCommand}"/>
             <Button Content="Open Game" Width="150" Margin="0,5" Command="{Binding OpenGameCommand}"/>
             <Button Content="Statistics" Width="150" Margin="0,5" Command="{Binding StatisticsCommand}"/>
             <Button Content="About" Width="150" Margin="0,5" Command="{Binding AboutCommand}"/>
             <Button Content="Exit" Width="150" Margin="0,5" Command="{Binding ExitCommand}"/>
 
-            <!-- Secțiunea Options -->
             <GroupBox Header="Options" Margin="0,20,0,0" Width="250">
                 <StackPanel Orientation="Vertical" Margin="0,5">
-                    <!-- Secțiunea pentru timpul de joc -->
                     <StackPanel Orientation="Horizontal" Margin="0,5">
                         <TextBlock Text="Time (sec):" VerticalAlignment="Center" Margin="0,0,5,0"/>
                         <TextBox Width="60" Text="{Binding GameTimeSeconds, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                    <!-- Secțiunea pentru selectarea modului de joc -->
                     <StackPanel Orientation="Horizontal" Margin="0,5">
                         <RadioButton Content="Standard (4x4)" 
                                      GroupName="GameOptions"
@@ -47,7 +41,6 @@
                                      Margin="20,0,0,0"
                                      IsChecked="{Binding IsStandardSelected, Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}" />
                     </StackPanel>
-                    <!-- Secțiunea Custom devine vizibilă doar când modul Custom este activ -->
                     <StackPanel Orientation="Horizontal" Margin="0,5"
                                 Visibility="{Binding IsStandardSelected, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                         <TextBlock Text="Rows:" VerticalAlignment="Center" Margin="0,0,5,0"/>

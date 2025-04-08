@@ -15,7 +15,6 @@ namespace MemoryGame.Services
             remainingTime = initialTimeSeconds;
         }
 
-        // Decrementează timpul cu 1 secundă și returnează noua valoare
         public int Tick()
         {
             if (remainingTime > 0)

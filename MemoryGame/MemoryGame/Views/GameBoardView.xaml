@@ -7,12 +7,10 @@
         <helpers:RelativePathToImageSourceConverter x:Key="RelativePathConverter"/>
     </Window.Resources>
     <DockPanel>
-        <!-- Meniul sus: Timer și butonul de salvare -->
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="10">
             <TextBlock Text="{Binding TimerText}" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <Button Content="Save Game" Command="{Binding SaveGameCommand}" Width="100"/>
         </StackPanel>
-        <!-- Zona de joc: afișarea tile-urilor -->
         <ItemsControl ItemsSource="{Binding Tiles}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -21,7 +19,6 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <!-- Fiecare tile este reprezentat printr-un buton -->
                     <Button Command="{Binding DataContext.FlipTileCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                             CommandParameter="{Binding Index}"
                             Margin="5" Width="100" Height="100">
