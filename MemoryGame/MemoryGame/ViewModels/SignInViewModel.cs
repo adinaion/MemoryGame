@@ -64,15 +64,13 @@ namespace MemoryGame.ViewModels
             var newUserWindow = new Views.NewUserWindow();
             if (newUserWindow.ShowDialog() == true)
             {
-                string userName = newUserWindow.UserName;
-                string absoluteImagePath = newUserWindow.ImagePath;
-                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                string relativeImagePath = PathHelper.GetRelativePath(baseDir, absoluteImagePath);
-
+                var vm = newUserWindow.DataContext as NewUserViewModel;
+                string userName = vm.UserName;
+                string imageRelativePath = vm.GetSelectedImageRelativePath();
                 var newUser = new User
                 {
                     Name = userName,
-                    ImagePath = relativeImagePath
+                    ImagePath = imageRelativePath
                 };
 
                 Users.Add(newUser);

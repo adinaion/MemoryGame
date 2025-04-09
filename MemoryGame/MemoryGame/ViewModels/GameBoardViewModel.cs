@@ -86,7 +86,7 @@ namespace MemoryGame.ViewModels
                     statService.UpdateStatistics(currentGame.Player.Name, false);
 
                     gameTimer.Stop();
-                    MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Game Over", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Timpul a expirat! Jocul este pierdut.", "Game Over", MessageBoxButton.OK, MessageBoxImage.Information);
                     CloseAction?.Invoke();
 
                 }

@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using System.Collections.Generic;
-
 namespace MemoryGame.Models
 {
     public class Game
