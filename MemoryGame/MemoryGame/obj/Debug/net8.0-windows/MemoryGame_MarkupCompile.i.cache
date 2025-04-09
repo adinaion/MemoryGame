@@ -4,14 +4,14 @@
 winexe
 C#
 .cs
-C:\Users\Adina\Desktop\MAP\teme\tema2\MemoryGame\MemoryGame\MemoryGame\obj\Debug\net8.0-windows\
+C:\Users\Adina\Desktop\MemoryGame\MemoryGame\MemoryGame\obj\Debug\net8.0-windows\
 MemoryGame
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\Adina\Desktop\MAP\teme\tema2\MemoryGame\MemoryGame\MemoryGame\App.xaml
+C:\Users\Adina\Desktop\MemoryGame\MemoryGame\MemoryGame\App.xaml
 5190107071
-482133896774
+30-216130621
 31632613574
 198-556154604
 Views\GameBoardView.xaml;Views\GameView.xaml;Views\NewUserWindow.xaml;Views\SignInView.xaml;Views\StatisticsView.xaml;

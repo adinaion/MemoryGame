@@ -50,8 +50,6 @@
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="3"/>
                             <ComboBoxItem Content="4"/>
-                            <ComboBoxItem Content="5"/>
-                            <ComboBoxItem Content="6"/>
                         </ComboBox>
                         <TextBlock Text="Columns:" VerticalAlignment="Center" Margin="10,0,5,0"/>
                         <ComboBox x:Name="cbColumns" Width="40" 
@@ -60,8 +58,6 @@
                             <ComboBoxItem Content="2"/>
                             <ComboBoxItem Content="3"/>
                             <ComboBoxItem Content="4"/>
-                            <ComboBoxItem Content="5"/>
-                            <ComboBoxItem Content="6"/>
                         </ComboBox>
                     </StackPanel>
                 </StackPanel>

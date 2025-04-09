@@ -15,7 +15,6 @@ namespace MemoryGame.ViewModels
 {
     public class GameViewModel : BaseViewModel
     {
-        // Utilizatorul curent (setat după login)
         public User CurrentPlayer { get; set; }
 
         public ObservableCollection<string> Categories { get; set; }
@@ -89,7 +88,6 @@ namespace MemoryGame.ViewModels
             }
         }
 
-        // Comenzile meniului
         public ICommand NewGameCommand { get; }
         public ICommand OpenGameCommand { get; }
         public ICommand StatisticsCommand { get; }
@@ -101,7 +99,6 @@ namespace MemoryGame.ViewModels
 
         public GameViewModel()
         {
-            // Inițializează lista de categorii
             Categories = new ObservableCollection<string>
             {
                 "Category 1",
@@ -137,15 +134,12 @@ namespace MemoryGame.ViewModels
                 return;
             }
 
-            // Creează un nou joc folosind logica din serviciu
             Game newGame = gameLogicService.CreateNewGame(SelectedCategory, rows, columns, CurrentPlayer, GameTimeSeconds);
-            // Salvare inițială, dacă e nevoie
             gameService.SaveGame(newGame);
 
             MessageBox.Show($"New Game started!\nCategory: {newGame.Category}\nDimensions: {newGame.Rows}x{newGame.Columns}",
                 "New Game", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // Deschide fereastra de joc
             var gameBoardView = new Views.GameBoardView(newGame);
             gameBoardView.Show();
         }
@@ -158,7 +152,6 @@ namespace MemoryGame.ViewModels
                 return;
             }
 
-            // Încarcă jocul salvat pentru utilizatorul curent
             Game loadedGame = gameService.LoadGame(CurrentPlayer.Name);
             if (loadedGame != null)
             {
@@ -180,7 +173,7 @@ namespace MemoryGame.ViewModels
 
         private void ShowAbout()
         {
-            MessageBox.Show("Student: Numele Studentului\nEmail: student@example.com\nGrupa: XYZ\nSpecializare: Informatică",
+            MessageBox.Show("Student: Ion Florina-Adina\nEmail: florina.ion@student.unitbv.ro\nGrupa: 10LF232\nSpecializare: Informatică",
                 "About", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
