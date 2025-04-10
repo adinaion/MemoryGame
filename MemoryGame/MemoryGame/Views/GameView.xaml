@@ -5,26 +5,91 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:helpers="clr-namespace:MemoryGame.Helpers"
         mc:Ignorable="d"
-        Title="Memory Game" Height="450" Width="800">
+        Title="Memory Game" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="PaleTurquoise">
     <Window.Resources>
-        <helpers:RelativePathToImageSourceConverter x:Key="RelativePathConverter"/>
-        <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-        <helpers:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        <ResourceDictionary>
+            <helpers:RelativePathToImageSourceConverter x:Key="RelativePathConverter"/>
+            <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <helpers:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+
+            <Style x:Key="ThemedButtonStyle" TargetType="Button">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#20B2AA" Offset="0"/>
+                            <GradientStop Color="#4169E1" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Padding" Value="10"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="MidnightBlue"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#66CDAA" Offset="0"/>
+                                                <GradientStop Color="#5F9EA0" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="MidnightBlue"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="DarkSlateGray"/>
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+            </Style>
+            <Style TargetType="GroupBox">
+                <Setter Property="Foreground" Value="MidnightBlue"/>
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock Text="Category:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <ComboBox x:Name="cbCategory" Width="150" 
+                <ComboBox x:Name="cbCategory" Width="150"
                           ItemsSource="{Binding Categories}"
                           SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" />
             </StackPanel>
 
-            <Button Content="New Game" Width="150" Margin="0,5" Command="{Binding NewGameCommand}"/>
-            <Button Content="Open Game" Width="150" Margin="0,5" Command="{Binding OpenGameCommand}"/>
-            <Button Content="Statistics" Width="150" Margin="0,5" Command="{Binding StatisticsCommand}"/>
-            <Button Content="About" Width="150" Margin="0,5" Command="{Binding AboutCommand}"/>
-            <Button Content="Exit" Width="150" Margin="0,5" Command="{Binding ExitCommand}"/>
+            <Button Content="New Game" Width="150" Margin="0,5" Command="{Binding NewGameCommand}"
+                    Style="{StaticResource ThemedButtonStyle}"/>
+            <Button Content="Open Game" Width="150" Margin="0,5" Command="{Binding OpenGameCommand}"
+                    Style="{StaticResource ThemedButtonStyle}"/>
+            <Button Content="Statistics" Width="150" Margin="0,5" Command="{Binding StatisticsCommand}"
+                    Style="{StaticResource ThemedButtonStyle}"/>
+            <Button Content="About" Width="150" Margin="0,5" Command="{Binding AboutCommand}"
+                    Style="{StaticResource ThemedButtonStyle}"/>
+            <Button Content="Exit" Width="150" Margin="0,5" Command="{Binding ExitCommand}"
+                    Style="{StaticResource ThemedButtonStyle}"/>
 
             <GroupBox Header="Options" Margin="0,20,0,0" Width="250">
                 <StackPanel Orientation="Vertical" Margin="0,5">
@@ -33,7 +98,7 @@
                         <TextBox Width="60" Text="{Binding GameTimeSeconds, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <RadioButton Content="Standard (4x4)" 
+                        <RadioButton Content="Standard (4x4)"
                                      GroupName="GameOptions"
                                      IsChecked="{Binding IsStandardSelected, Mode=TwoWay}" />
                         <RadioButton Content="Custom"
@@ -44,7 +109,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0,5"
                                 Visibility="{Binding IsStandardSelected, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                         <TextBlock Text="Rows:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <ComboBox x:Name="cbRows" Width="40" 
+                        <ComboBox x:Name="cbRows" Width="40"
                                   SelectedValuePath="Content"
                                   SelectedValue="{Binding CustomRows, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBoxItem Content="2"/>
@@ -52,7 +117,7 @@
                             <ComboBoxItem Content="4"/>
                         </ComboBox>
                         <TextBlock Text="Columns:" VerticalAlignment="Center" Margin="10,0,5,0"/>
-                        <ComboBox x:Name="cbColumns" Width="40" 
+                        <ComboBox x:Name="cbColumns" Width="40"
                                   SelectedValuePath="Content"
                                   SelectedValue="{Binding CustomColumns, UpdateSourceTrigger=PropertyChanged}">
                             <ComboBoxItem Content="2"/>
